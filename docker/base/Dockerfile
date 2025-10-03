@@ -45,5 +45,5 @@ ARG GID=1000
 RUN groupadd -g ${GID} ${USER} \
  && useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USER}
 
-USER ${USER}
+USER root
 WORKDIR /home/${USER}/app
