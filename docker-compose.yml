@@ -1,0 +1,10 @@
+services:
+  dev:
+    build:
+      context: ./docker
+      dockerfile: base/Dockerfile
+    container_name: skibidi
+    volumes:
+      - .:/home/dev/app   # Mount project folder inside container
+    tty: true             # Keep container running
+    stdin_open: true      # Allow interactive shell

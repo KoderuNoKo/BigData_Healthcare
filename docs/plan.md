@@ -1,5 +1,3 @@
-Great — below is a full, practical blueprint for **“IoT-based Healthcare Monitoring & Diagnostic Analytics”** that fits *both* your Big Data course (systems, pipeline, performance) and your Big Data Analytics & BI course (diagnostic analytics, dashboards, BI story). I follow the exact frame you asked for and include runnable steps, commands with flag explanations, sample code snippets, experiment ideas, and a minimal publishable experiment you can complete quickly.
-
 # 1 — Project goal & concrete research questions
 
 **Project goal (short):**
