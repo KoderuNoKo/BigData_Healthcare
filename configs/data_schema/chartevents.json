@@ -1,0 +1,26 @@
+{
+  "topic": "icu_chartevents",
+  "description": "Streaming vitals and bedside measurements from ICU chartevents table",
+  "key": {
+    "name": "subject_id",
+    "type": "int"
+  },
+  "value_schema": {
+    "subject_id": "int",
+    "hadm_id": "int",
+    "stay_id": "int",
+    "caregiver_id": "int",
+    "charttime": "string",
+    "storetime": "string",
+    "itemid": "int",
+    "value": "string",
+    "valuenum": "float",
+    "valueuom": "string",
+    "warning": "int"
+  },
+  "notes": [
+    "subject_id is used as Kafka message key for partitioning",
+    "charttime is the event timestamp for Spark processing",
+    "valuenum holds the numeric measurement (heart rate, temp, etc.)"
+  ]
+}
