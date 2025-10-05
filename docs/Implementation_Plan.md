@@ -9,6 +9,7 @@
 	- Apache Kafka: Handle the simulated stream of data into the system
 	- Apache Spark: Subscribe to the data stream returned by Kafka, perform processing and analytic works, prepared to be showed.
 	- Tableau: Analytic module, read the processed data from Spark. Perform analytic + visualization works
+
 # Problem Statement
 
 - Build a system with the ability to handle a large and high velocity data stream. Implement a pipeline from Kafka -> Spark -> Tableau 
@@ -23,11 +24,13 @@
 	- ICU
 	- ED
 
-- Patient vitals life signs
-	- `ICU.chartevents` Charted items occurring during the ICU stay. Contains the majority of information documented in the ICU.
-	- `Hosp.labevents` The labevents table stores the results of all laboratory measurements made for a single patient. These include hematology measurements, blood gases, chemistry panels, and less common tests such as genetic assays.
-	- 
-	- ...
+- Patient vitals life signs & diagnostic 
+	- `ICU.chartevents` charted items occurring during the ICU stay. Contains the majority of information documented in the ICU.
+	- `Hosp.labevents`  stores the results of all laboratory measurements made for a single patient. These include hematology measurements, blood gases, chemistry panels, and less common tests such as genetic assays.
+	- `ED.vitalsign` Patients admitted to the emergency department have routine vital signs taken ever 1-4 hours. These vital signs are stored in this table.
+		- Processing with this table can be challenging with a great number of missing values.
+	- (Extension) `ICU.inputevents` Information documented regarding continuous infusions or intermittent administrations.
+	- (Extension) `ICU.outputevents` Information regarding patient outputs including urine, drainage, and so on.
 
 # Simulation & Processing
 
@@ -46,3 +49,5 @@ These are datasets where values are fixed per patient or admission, not continuo
 ### 2. **Streaming Simulation (time-series with `charttime`)**
 
 This is where Kafka comes in. You can treat these tables as “IoT sensor data” from patients, publishing them row by row according to their timestamp.
+
+# 
