@@ -47,3 +47,5 @@ RUN groupadd -g ${GID} ${USER} \
 
 USER root
 WORKDIR /home/${USER}/app
+
+RUN export PATH=$PATH:/opt/spark/bin
