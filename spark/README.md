@@ -31,7 +31,7 @@ python3 ./kafka_producer/kafka_loop.py
 ```
 
 ### 3. Set Up Spark
-
+	
 Open a new terminal and execute the following commands:
 
 #### Make the setup script executable:

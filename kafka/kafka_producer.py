@@ -4,7 +4,6 @@ import time
 import pandas as pd
 from confluent_kafka import Producer
 import argparse
-from pathlib import Path
 
 BOOTSTRAP = "cp-kafka:9092"
 TOPIC = "icu_chartevents"

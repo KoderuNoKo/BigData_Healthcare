@@ -1,4 +1,4 @@
-	# General Information
+# General Information
 
 - Dataset: MIMIC-IV, v3.1
 - Modules used:
@@ -30,7 +30,7 @@
 ### Project Notes
 
 - Focus on timeseries data for streaming and simulating velocity of data.
-	
+
 ### Data Notes
 
 - Date shifting
