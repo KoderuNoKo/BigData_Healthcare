@@ -17,12 +17,13 @@ class CharteventsProducer(BaseProducer):
             "itemid": int(row["itemid"]),
             "value": row["value"],
             "valuenum": None if pd.isna(row["valuenum"]) else float(row["valuenum"]),
+            "valuenum": None if pd.isna(row["valuenum"]) else float(row["valuenum"]),
             "valueuom": row["valueuom"],
             "warning": row["warning"]
         }
         
     def get_partition_key(self, message):
-        partition_key = super().config.get('partition_key', None)
+        partition_key = self.config.get('partition_key', None)
         return str(message[partition_key]) if partition_key else None
     
     def validate_row(self, row):

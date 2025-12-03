@@ -8,8 +8,7 @@ from typing import Dict, Any, Type
 
 from .base_producer import BaseProducer
 from .chartevents_producer import CharteventsProducer
-# Future imports:
-# from labevents_producer import LabeventsProducer
+from .labevents_producer import LabeventsProducer
 # from vitalsign_producer import VitalsignProducer
 # from inputevents_producer import InputeventsProducer
 # from outputevents_producer import OutputeventsProducer
@@ -29,8 +28,7 @@ class ProducerFactory:
     # Registry mapping producer names to their classes
     _PRODUCER_REGISTRY: Dict[str, Type[BaseProducer]] = {
         'chartevents': CharteventsProducer,
-        # Add more as you implement them:
-        # 'labevents': LabeventsProducer,
+        'labevents': LabeventsProducer,
         # 'vitalsign': VitalsignProducer,
         # 'inputevents': InputeventsProducer,
         # 'outputevents': OutputeventsProducer,

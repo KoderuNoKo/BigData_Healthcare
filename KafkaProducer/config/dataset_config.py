@@ -7,14 +7,16 @@
 """
 import copy
 
-from .kafka_config import TOPIC_MAPPING
+from .kafka_config import get_topic_mapping
+
+topic_mapping = get_topic_mapping()
 
 CHECKPOINT_DIR = './checkpoints'
 
 DATASET_SOURCES = {
     'chartevents': {
-        'file_path': '/data/mimic-iv-3.1/icu/chartevents.csv',
-        'topic': TOPIC_MAPPING['chartevents'],
+        'file_path': '/home/dev/app/data/mimic-iv-3.1/icu/chartevents.csv',
+        'topic': topic_mapping['chartevents'],
         'rate': 100,
         'batch_size': 5000,
         'key_field': 'subject_id',
@@ -24,17 +26,22 @@ DATASET_SOURCES = {
         'enabled': True,
     },
     'labevents': {
-        'file_path': '/data/mimic-iv-3.1/hosp/labevents.csv',
+        'file_path': '/home/dev/app/data/mimic-iv-3.1/hosp/labevents.csv',
+        'topic': topic_mapping['labevents'],
         'rate': 50,
         'batch_size': 3000,
         'key_field': 'subject_id',
         
         # flags
-        'enabled': False,
+        'enabled': True,
     },
 }
 
-def get_producer_configs(enabled_only: bool = False):
+for name, config in DATASET_SOURCES.items():
+    if not config.get('topic', False):
+        config['topic'] = topic_mapping[name]
+
+def get_producer_configs(enabled_only: bool = True):
     """Returns datesets contains"""
     dataset_configs = copy.deepcopy(DATASET_SOURCES)
     return {

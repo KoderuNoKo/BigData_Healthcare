@@ -1,6 +1,8 @@
+import copy
+
 KAFKA_CONFIG = {
     # connection
-    'bootstrap_servers': ['cp-kafka:9092',],
+    'bootstrap.servers': 'cp-kafka:9092',
 }
 
 TOPIC_MAPPING = {
@@ -10,3 +12,9 @@ TOPIC_MAPPING = {
     'inputevents': 'icu_inputevents',
     'outputevents': 'icu_outputevents',
 }
+
+def get_kafka_config():
+    return copy.deepcopy(KAFKA_CONFIG)
+
+def get_topic_mapping():
+    return copy.deepcopy(TOPIC_MAPPING)

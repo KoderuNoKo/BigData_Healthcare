@@ -7,7 +7,7 @@ from typing import Dict, Any, Optional, Callable
 from pathlib import Path
 from dataclasses import dataclass, asdict
 import pandas as pd
-from confluent_kafka import Producer, KafkaError, KafkaException
+from confluent_kafka import Producer, KafkaException
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ class BaseProducer(ABC):
         """
         Args:
             name: Producer name (e.g., 'chartevents')
-            config: Producer-specific configuration
+            producer_config: Producer-specific configuration
                 {
                     'file_path': str,
                     'topic': str,
@@ -71,8 +71,8 @@ class BaseProducer(ABC):
         # Extract configuration
         self.file_path = config['file_path']
         self.topic = config['topic']
-        self.rate = config.get('rate', 10)
-        self.batch_size = config.get('batch_size', 1000)
+        self.rate = config.get('rate')
+        self.batch_size = config.get('batch_size')
         self.time_multiplier = config.get('time_multiplier', 1.0)
         
         # Checkpointing
@@ -147,6 +147,7 @@ class BaseProducer(ABC):
         """
         pass
     
+    @abstractmethod
     def validate_row(self, row: pd.Series) -> bool:
         """
         Validate a row before processing.
