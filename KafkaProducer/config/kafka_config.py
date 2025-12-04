@@ -8,6 +8,7 @@ KAFKA_CONFIG = {
 TOPIC_MAPPING = {
     'chartevents': 'icu_chartevents',
     'labevents': 'hosp_labevents',
+    'd_items': 'icu_d_items',
     'vitalsign': 'ed_vitalsign',
     'inputevents': 'icu_inputevents',
     'outputevents': 'icu_outputevents',

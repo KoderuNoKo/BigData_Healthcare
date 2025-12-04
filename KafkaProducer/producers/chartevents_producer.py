@@ -1,4 +1,5 @@
 import pandas as pd
+from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
 
 from .base_producer import BaseProducer
 
@@ -28,3 +29,18 @@ class CharteventsProducer(BaseProducer):
     
     def validate_row(self, row):
         return True
+    
+    def get_schema(self):
+        return StructType([
+            StructField("subject_id", IntegerType()),
+            StructField("hadm_id", IntegerType()),
+            StructField("stay_id", IntegerType()),
+            StructField("caregiver_id", IntegerType()),
+            StructField("charttime", StringType()),
+            StructField("storetime", StringType()),
+            StructField("itemid", IntegerType()),
+            StructField("value", StringType()),
+            StructField("valuenum", DoubleType()),
+            StructField("valueuom", StringType()),
+            StructField("warning", StringType())
+        ])

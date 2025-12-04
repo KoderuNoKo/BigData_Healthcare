@@ -35,6 +35,17 @@ DATASET_SOURCES = {
         # flags
         'enabled': True,
     },
+    
+    'd_items': {
+        'file_path': '/home/dev/app/data/mimic-iv-3.1/icu/d_items.csv',
+        'topic': topic_mapping['d_items'],
+        'rate': 50,
+        'batch_size': 500,
+        'key_field': 'itemid',
+        
+        # flags
+        'enabled': True,
+    },
 }
 
 for name, config in DATASET_SOURCES.items():

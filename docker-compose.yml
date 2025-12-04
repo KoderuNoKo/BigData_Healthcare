@@ -16,6 +16,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
       - "2181:2181"
+      - "4040:4040"
 
   kafka:
     image: confluentinc/cp-kafka:7.3.0

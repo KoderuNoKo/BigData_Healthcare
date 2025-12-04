@@ -9,6 +9,7 @@ from typing import Dict, Any, Type
 from .base_producer import BaseProducer
 from .chartevents_producer import CharteventsProducer
 from .labevents_producer import LabeventsProducer
+from .d_items_producer import DItemsProducer
 # from vitalsign_producer import VitalsignProducer
 # from inputevents_producer import InputeventsProducer
 # from outputevents_producer import OutputeventsProducer
@@ -29,6 +30,7 @@ class ProducerFactory:
     _PRODUCER_REGISTRY: Dict[str, Type[BaseProducer]] = {
         'chartevents': CharteventsProducer,
         'labevents': LabeventsProducer,
+        'd_items': DItemsProducer
         # 'vitalsign': VitalsignProducer,
         # 'inputevents': InputeventsProducer,
         # 'outputevents': OutputeventsProducer,
