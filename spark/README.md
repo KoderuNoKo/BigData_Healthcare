@@ -51,7 +51,7 @@ docker exec -it skibidi /bin/bash
 
 #### Submit the Spark job:
 ```bash
-spark-submit spark.py
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 spark/spark_job.py 
 ```
 
 ## Notes

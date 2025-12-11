@@ -1,7 +1,7 @@
 # Project: Build an application with Big Data Analytics in Healthcare
 
 ## Topic details:
-Big data analytics for IoT-based electricity/water meters
+Big data analytics for IoT-based on 
 - A tool generating data streaming like many electricity/water meters
 - Data collection: using Kafka
 - Data analytics: (1) filtering, sampling, integration, (2) your analytics goals – using Spark

@@ -5,3 +5,4 @@ data
 lab
 *.tgz
 **/__pycache__/
+checkpoints

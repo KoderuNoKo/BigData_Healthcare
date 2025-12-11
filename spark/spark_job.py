@@ -1,10 +1,10 @@
 # spark_job.py
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import expr, from_json, to_json, col
-from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
 
 from modules.kafka_io import KafkaIO
 from modules.sampler import DataSampler
+from modules.topics_schema import *
 
 KAFKA_BOOTSTRAP_SERVERS = 'cp-kafka:9092'
 
@@ -17,34 +17,15 @@ spark = (SparkSession.builder
     # Add Kafka package for reading from Kafka
     .config("spark.jars.packages",
             "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1")
+    .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000")
+    .config("spark.hadoop.fs.s3a.access.key", "minioadmin")
+    .config("spark.hadoop.fs.s3a.secret.key", "minioadmin123")
+    .config("spark.hadoop.fs.s3a.path.style.access", "true")
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
     .getOrCreate()
 )
 
-chartevents_schema = StructType([
-    StructField("subject_id", IntegerType()),
-    StructField("hadm_id", IntegerType()),
-    StructField("stay_id", IntegerType()),
-    StructField("caregiver_id", IntegerType()),
-    StructField("charttime", StringType()),
-    StructField("storetime", StringType()),
-    StructField("itemid", IntegerType()),
-    StructField("value", StringType()),
-    StructField("valuenum", DoubleType()),
-    StructField("valueuom", StringType()),
-    StructField("warning", StringType())
-])
 
-d_items_schema = StructType([
-    StructField("itemid", IntegerType()),
-    StructField("label", StringType()),
-    StructField("abbreviation", StringType()),
-    StructField("linksto", StringType()),
-    StructField("category", StringType()),
-    StructField("unitname", StringType()),
-    StructField("param_type", StringType()),
-    StructField("lownormalvalue", DoubleType()),
-    StructField("highnormalvalue", DoubleType()),
-])
 
 kafka_io = KafkaIO(spark, KAFKA_BOOTSTRAP_SERVERS)
 sampler = DataSampler()
@@ -74,6 +55,8 @@ df_chartevents = (df_chartevents_raw
     .select(from_json(col('value').cast('string'), chartevents_schema).alias('data'))
     .select('data.*')
 )
+
+df_chartevents.write.mode("append").parquet("s3a://mimic-bronze/chartevents/")
 
 df_d_items = (df_d_items_raw
     .select(from_json(col('value').cast('string'), d_items_schema).alias('data'))

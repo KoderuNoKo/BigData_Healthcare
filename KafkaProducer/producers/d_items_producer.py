@@ -1,5 +1,4 @@
 import pandas as pd
-from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
 
 from .base_producer import BaseProducer
 
@@ -26,16 +25,3 @@ class DItemsProducer(BaseProducer):
     
     def validate_row(self, row):
         return True
-    
-    def get_schema(self):
-        return StructType([
-            StructField("itemid", IntegerType()),
-            StructField("label", StringType()),
-            StructField("abbreviation", StringType()),
-            StructField("linksto", StringType()),
-            StructField("category", StringType()),
-            StructField("unitname", StringType()),
-            StructField("param_type", StringType()),
-            StructField("lownormalvalue", DoubleType()),
-            StructField("highnormalvalue", DoubleType()),
-        ])
