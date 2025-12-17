@@ -1,61 +1,28 @@
-# Project Setup Guide
+# Spark Jobs
 
-## Prerequisites
+- This directory contains all the spark jobs to be used in this project
 
-- Docker and Docker Compose installed
-- Python 3.x installed
-- Bash shell access
+## Directory Structure
 
-## Getting Started
-
-### 1. Start Docker Services
-
-Build and start all three Docker containers:
-
-```bash
-docker compose up -d --build
 ```
-
-### 2. Set Up Kafka Producer
-
-Open a terminal and run one of the following Kafka producer scripts:
-
-```bash
-python3 ./kafka_producer/kafka_producer.py
+├───conf
+├───modules
+    └───__pycache__
+└───# spark jobs
 ```
+Where:
+- `conf` contains the `.properties` file defining settings for spark jobs
+- `modules` common dependencies of spark jobs
 
-**OR**
+## How to run
 
+- By default, this directory is mounted to `spark` container
+- To submit a job, run this command in `spark` container
 ```bash
-python3 ./kafka_producer/kafka_loop.py
+  spark-submit \
+    --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1 \
+    --conf spark.driver.extraJavaOptions='-Dlog4j.configurationFile=/app/conf/log4j2.properties' \
+    --py-files modules.zip \
+    <spark_job>.py
 ```
-
-### 3. Set Up Spark
-	
-Open a new terminal and execute the following commands:
-
-#### Make the setup script executable:
-```bash
-chmod +x spark_setup.sh
-```
-
-#### Run the Spark-Kafka setup script:
-```bash
-bash setup_spark_kafka.sh
-```
-
-#### Enter the Spark container:
-```bash
-docker exec -it skibidi /bin/bash
-```
-
-#### Submit the Spark job:
-```bash
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 spark/spark_job.py 
-```
-
-## Notes
-
-- Ensure Kafka is running before submitting the Spark job
-- Keep the Kafka producer terminal running while processing data
-- The Spark container is named `skibidi`
+- Note that `./modules` must be compressed to `.zip` every time changes is made. It is the zipped file that is submit to spark, not the folder

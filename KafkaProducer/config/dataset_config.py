@@ -21,29 +21,6 @@ DATASET_SOURCES = {
         'batch_size': 5000,
         'key_field': 'subject_id',
         'partition_key': 'stay_id',
-        
-        # flags
-        'enabled': True,
-    },
-    'labevents': {
-        'file_path': '/home/dev/app/data/mimic-iv-3.1/hosp/labevents.csv',
-        'topic': topic_mapping['labevents'],
-        'rate': 50,
-        'batch_size': 3000,
-        'key_field': 'subject_id',
-        
-        # flags
-        'enabled': True,
-    },
-    
-    'd_items': {
-        'file_path': '/home/dev/app/data/mimic-iv-3.1/icu/d_items.csv',
-        'topic': topic_mapping['d_items'],
-        'rate': 50,
-        'batch_size': 500,
-        'key_field': 'itemid',
-        
-        # flags
         'enabled': True,
     },
 }

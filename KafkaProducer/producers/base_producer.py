@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 import logging
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional, Callable
+from typing import Dict, Any, Optional
 from pathlib import Path
 from dataclasses import dataclass, asdict
 import pandas as pd

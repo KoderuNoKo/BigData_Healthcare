@@ -28,3 +28,14 @@ d_items_schema = StructType([
     StructField("lownormalvalue", DoubleType()),
     StructField("highnormalvalue", DoubleType()),
 ])
+
+icu_stays_schema = StructType([
+    StructField("subject_id", IntegerType()),
+    StructField("hadm_id", IntegerType()),
+    StructField("stay_id", IntegerType()),
+    StructField("first_careunit", StringType()),
+    StructField("last_careunit", StringType()),
+    StructField("inttime", TimestampType()),
+    StructField("outtime", TimestampType()),
+    StructField("los", DoubleType()),
+])

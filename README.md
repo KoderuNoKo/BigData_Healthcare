@@ -28,16 +28,21 @@ Big data analytics for IoT-based on
 |   `-- spark
 |-- docs
 |-- kafka
+|-- KafkaProducer
 |-- misc
 |-- scripts
-`-- spark_jobs
+|-- spark
+`-- Tableau
 ```
 
 # Guide for Developers
 
-- It is recommended to run and develop the project within an Ubuntu environment using Docker. The current setup already covers the initialization of a Docker Ubuntu container. Below is a simple guide to set up the dev environment.
+## Dev environment
 
-### 1. Build container
+- It is recommended to run and develop the project within an Ubuntu environment using Docker. The current setup already covers the initialization of a Docker Ubuntu container that will serve as the primary dev environment. Below is a simple guide to set up the dev environment.
+
+### 1. Build environment (containers)
+
 For the first run, in the main project repo, run:
 
 ```shell
@@ -45,21 +50,21 @@ docker compose up -d --build
 ```
 
 ### 2. Access the container
+
 ```shell
 docker exec -it <container_name> /bin/bash
 ```
 
 - Replace `<container_name>` with the actual container name.
-    
 - You can change the container name in `./docker-compose.yml`.
-    
 - By default, it is `skibidi`.
 
 ### 3. Python virtual environment & dependencies
+
 - Python 3.12.x is available in the container (`python3`, `python3-venv`).
 - Create a virtual environment:
 
-```shell
+```bash
 python3 -m venv .venv
 ```
 
@@ -78,10 +83,13 @@ pip install -r ./docker/base/requirements.txt
 pip freeze > ./docker/base/requirements.txt
 ```
 
-### 4. Running Jupyter notebooks in VS Code
+## Data source
 
-- Install the **Jupyter** and **Python** and **Dev Containers** extensions in VS Code.
-- Make sure your container is running. Then connect VS Code to the container with the **Remote Explorer** extension.
-- Open any `.ipynb` file.
-- In the top-right kernel selector, pick the interpreter inside your `.venv` (usually `.venv/bin/python`).
-- Run notebook cells as usual inside VS Code.
+- The data used in this project is MIMIC-IV v3.1, specifically the modules: `hosp`, `icu`, and `ed`. The data itself require credentialed access.
+- Once you get access to the data. There is 2 ways to feed data to the project
+
+### 1. Local data storage (not recommended)
+
+The first and simplest way is to download and extract the dataset into your machine. Placing them under the `./data` directory. However, the MIMIC-IV dataset is huge. (Fully extracted size can reach up to ~100 GBs)
+
+### 2. Google BigQuery
