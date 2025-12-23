@@ -1,5 +1,11 @@
 from pyspark.sql import SparkSession
 
+POSTGRES_CONFIG = {
+    "url": "jdbc:postgresql://postgres:5432/mimic_dw",
+    "user": "dev",
+    "password": "devpassword",
+    "driver": "org.postgresql.Driver"
+}
 
 def build_spark(app_name):
     return (

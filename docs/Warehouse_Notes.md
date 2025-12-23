@@ -34,7 +34,10 @@
 - `dim_triage`
 	- source: `ed/triage` 
 
-# How to obtained tables
+- `dim_admission` 
+	- source: `hosp/dim_admission`
+
+# How to obtain tables
 
 - Table 0: `icu_stays` with year
 

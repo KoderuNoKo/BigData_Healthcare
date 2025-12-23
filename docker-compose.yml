@@ -8,6 +8,8 @@ services:
       - .:/home/dev/app   # Mount project folder inside container
     tty: true             # Keep container running
     stdin_open: true      # Allow interactive shell
+    ports:
+      - "8501:8501"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
@@ -65,7 +67,7 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_EMAIL: kien@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8080:80"
@@ -81,6 +83,9 @@ services:
     container_name: spark
     volumes:
       - ./spark:/app  # mount to spark's sub-directory
+      - ./data/application_default_credentials.json:/secrets/application_default_credentials.json # replace with actual key json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/application_default_credentials.json
     depends_on:
       - kafka
       - minio
@@ -91,8 +96,7 @@ services:
       - default
 
 
-
-
 volumes:
   minio_data:
   postgres_data:
+  
