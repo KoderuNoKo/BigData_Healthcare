@@ -29,6 +29,15 @@ d_items_schema = StructType([
     StructField("highnormalvalue", DoubleType()),
 ])
 
+patient_schema = StructType([
+    StructField("subject_id", IntegerType(), nullable=False),
+    StructField("gender", StringType(), nullable=False),
+    StructField("anchor_age", IntegerType(), nullable=False),
+    StructField("anchor_year", IntegerType(), nullable=False),
+    StructField("anchor_year_group", StringType(), nullable=False),
+    StructField("dod", TimestampType()),
+])
+
 icu_stays_schema = StructType([
     StructField("subject_id", IntegerType()),
     StructField("hadm_id", IntegerType()),
