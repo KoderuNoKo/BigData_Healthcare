@@ -178,7 +178,7 @@ def overview():
     # FIGURE 2: PLACEHOLDER
     # ==============================
     with col2:
-      st.subheader("🏥 ICU Stays by Last Care Unit")
+      st.subheader("🏥 ICU Stays by  Care Unit")
 
       try:
           unit_df = run_query(FIRST_CAREUNIT)
@@ -189,10 +189,10 @@ def overview():
                   x="first_careunit",
                   y="stay_count",
                   labels={
-                      "first_careunit": "First Care Unit",
+                      "first_careunit": "Care Unit",
                       "stay_count": "Number of ICU Stays"
                   },
-                  title="ICU Stays by Last Care Unit",
+                  title="ICU Stays by  Care Unit",
                   text="stay_count"
               )
 
