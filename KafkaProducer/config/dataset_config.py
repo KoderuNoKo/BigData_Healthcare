@@ -17,10 +17,19 @@ DATASET_SOURCES = {
     'chartevents': {
         'file_path': '/home/dev/app/data/mimic-iv-3.1/icu/chartevents.csv',
         'topic': topic_mapping['chartevents'],
-        'rate': 100,
+        'rate': 200,
         'batch_size': 5000,
         'key_field': 'subject_id',
         'partition_key': 'stay_id',
+        'enabled': True,
+    },
+    'microbiologyevents': {
+        'file_path': '/home/dev/app/data/mimic-iv-3.1/hosp/microbiologyevents.csv',
+        'topic': topic_mapping['microbiologyevents'],
+        'rate': 5,
+        'batch_size': 100,
+        'key_field': 'microevent_id',
+        'partition_key': 'subject_id',
         'enabled': True,
     },
 }

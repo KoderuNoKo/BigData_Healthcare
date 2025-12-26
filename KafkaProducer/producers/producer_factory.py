@@ -8,6 +8,7 @@ from typing import Dict, Any, Type
 
 from .base_producer import BaseProducer
 from .chartevents_producer import CharteventsProducer
+from .microbiologyevents_producer import MicrobiologyeventsProducer
 
 logger = logging.getLogger(__name__)    
 
@@ -24,6 +25,7 @@ class ProducerFactory:
     # Registry mapping producer names to their classes
     _PRODUCER_REGISTRY: Dict[str, Type[BaseProducer]] = {
         'chartevents': CharteventsProducer,
+        'microbiologyevents': MicrobiologyeventsProducer
     }
     
     @classmethod

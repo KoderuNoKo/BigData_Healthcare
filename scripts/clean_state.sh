@@ -14,11 +14,18 @@ set -x
 # reset kafka topics
 docker exec cp-kafka kafka-consumer-groups \
   --bootstrap-server localhost:9092 \
-  --group spark-icu-consumer \
   --reset-offsets \
   --to-earliest \
   --execute \
   --topic icu_chartevents
+  # --group spark-icu-consumer \
+
+docker exec cp-kafka kafka-consumer-groups \
+  --bootstrap-server localhost:9092 \
+  --reset-offsets \
+  --to-earliest \
+  --execute \
+  --topic hosp_microbiologyevents
 
 # clean minio data lake
 docker exec minio bash -c 'rm -rf /data/mimic-bronze/*'

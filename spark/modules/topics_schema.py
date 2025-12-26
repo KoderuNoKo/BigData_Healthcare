@@ -48,3 +48,31 @@ icu_stays_schema = StructType([
     StructField("outtime", TimestampType()),
     StructField("los", DoubleType()),
 ])
+
+microbiologyevents_schema = StructType([
+    StructField("microevent_id", IntegerType(), False),
+    StructField("subject_id", IntegerType(), False),
+    StructField("hadm_id", IntegerType(), True),
+    StructField("micro_specimen_id", IntegerType(), False),
+    StructField("order_provider_id", StringType(), True),
+    StructField("chartdate", TimestampType(), False),
+    StructField("charttime", TimestampType(), True),
+    StructField("spec_itemid", IntegerType(), False),
+    StructField("spec_type_desc", StringType(), False),
+    StructField("test_seq", IntegerType(), False),
+    StructField("storedate", TimestampType(), True),
+    StructField("storetime", TimestampType(), True),
+    StructField("test_itemid", IntegerType(), True),
+    StructField("test_name", StringType(), True),
+    StructField("org_itemid", IntegerType(), True),
+    StructField("org_name", StringType(), True),
+    StructField("isolate_num", IntegerType(), True),
+    StructField("quantity", StringType(), True),
+    StructField("ab_itemid", IntegerType(), True),
+    StructField("ab_name", StringType(), True),
+    StructField("dilution_text", StringType(), True),
+    StructField("dilution_comparison", StringType(), True),
+    StructField("dilution_value", DoubleType(), True),
+    StructField("interpretation", StringType(), True),
+    StructField("comments", StringType(), True)
+])
