@@ -37,7 +37,11 @@ CREATE TABLE dim_date (
     year INT
 );
 
+<<<<<<< HEAD
 -- Dimension: Time (grain: second)
+=======
+-- Dimension: Time (grain: second, no FK to date)
+>>>>>>> 22b70e8fe9c8765ef4d864170f09bd9aa70f22d1
 CREATE TABLE dim_time (
     time_key INT PRIMARY KEY,
     time_value TIME NOT NULL,

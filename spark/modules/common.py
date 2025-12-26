@@ -2,6 +2,12 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from .topics_schema import *
 
+POSTGRES_CONFIG = {
+    "url": "jdbc:postgresql://postgres:5432/mimic_dw",
+    "user": "dev",
+    "password": "devpassword",
+    "driver": "org.postgresql.Driver"
+}
 
 # ---- Define Transformation Function ----
 def chartevents_transform_to_silver(df):
