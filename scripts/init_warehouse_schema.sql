@@ -4,11 +4,17 @@
 -- ========================================
 
 -- Drop tables if they exist (for clean re-initialization)
-DROP TABLE IF EXISTS fact_chartevents CASCADE;
+DROP TABLE IF EXISTS dim_admission CASCADE;
 DROP TABLE IF EXISTS dim_d_items CASCADE;
-DROP TABLE IF EXISTS dim_time CASCADE;
 DROP TABLE IF EXISTS dim_date CASCADE;
+DROP TABLE IF EXISTS dim_diagnoses_icd CASCADE;
 DROP TABLE IF EXISTS dim_patients CASCADE;
+DROP TABLE IF EXISTS dim_time CASCADE;
+DROP TABLE IF EXISTS dim_triage CASCADE;
+DROP TABLE IF EXISTS fact_chartevents CASCADE;
+DROP TABLE IF EXISTS fact_edstays CASCADE;
+DROP TABLE IF EXISTS fact_icustays CASCADE;
+DROP TABLE IF EXISTS fact_microbiologyevents CASCADE;
 
 -- ========================================
 -- DIMENSION TABLES
@@ -37,11 +43,7 @@ CREATE TABLE dim_date (
     year INT
 );
 
-<<<<<<< HEAD
--- Dimension: Time (grain: second)
-=======
 -- Dimension: Time (grain: second, no FK to date)
->>>>>>> 22b70e8fe9c8765ef4d864170f09bd9aa70f22d1
 CREATE TABLE dim_time (
     time_key INT PRIMARY KEY,
     time_value TIME NOT NULL,
@@ -85,12 +87,12 @@ CREATE TABLE dim_triage (
 CREATE TABLE dim_admission (
     hadm_id INT PRIMARY KEY,
     subject_id INT,
-    admittime INT REFERENCES dim_time(time_key),
-    admitdate INT REFERENCES dim_date(date_key),
-    dischtime INT REFERENCES dim_time(time_key),
-    dischdate INT REFERENCES dim_date(date_key),
-    deathtime INT REFERENCES dim_time(time_key),
-    deathdate INT REFERENCES dim_date(date_key),
+    admittime_time INT REFERENCES dim_time(time_key),
+    admittime_date INT REFERENCES dim_date(date_key),
+    dischtime_time INT REFERENCES dim_time(time_key),
+    dischtime_date INT REFERENCES dim_date(date_key),
+    deathtime_time INT REFERENCES dim_time(time_key),
+    deathtime_date INT REFERENCES dim_date(date_key),
     admission_type VARCHAR(50),
     admit_provider_id VARCHAR(50),
     admission_location VARCHAR(100),
@@ -99,10 +101,10 @@ CREATE TABLE dim_admission (
     language VARCHAR(50),
     marital_status VARCHAR(50),
     race VARCHAR(100),
-    edregtime INT REFERENCES dim_time(time_key),
-    edregdate INT REFERENCES dim_date(date_key),
-    edouttime INT REFERENCES dim_time(time_key),
-    edoutdate INT REFERENCES dim_date(date_key),
+    edregtime_time INT REFERENCES dim_time(time_key),
+    edregtime_date INT REFERENCES dim_date(date_key),
+    edouttime_time INT REFERENCES dim_time(time_key),
+    edouttime_date INT REFERENCES dim_date(date_key),
     hospital_expire_flag INT
 );
 
@@ -121,8 +123,8 @@ CREATE TABLE fact_chartevents (
     hadm_id INT,
     stay_id INT,
     caregiver_id INT,
-    chartdate INT REFERENCES dim_date(date_key),
-    charttime INT REFERENCES dim_time(time_key),
+    charttime_date INT REFERENCES dim_date(date_key),
+    charttime_time INT REFERENCES dim_time(time_key),
     itemid INT REFERENCES dim_d_items(itemid),
     value VARCHAR(255),
     valuenum DOUBLE PRECISION,
@@ -153,8 +155,8 @@ CREATE TABLE fact_microbiologyevents (
     hadm_id INT,
     micro_specimen_id INT,
     order_provider_id VARCHAR(50),
-    chartdate INT REFERENCES dim_date(date_key),
-    charttime INT REFERENCES dim_time(time_key),
+    charttime_date INT REFERENCES dim_date(date_key),
+    charttime_time INT REFERENCES dim_time(time_key),
     spec_itemid INT,
     spec_type_desc VARCHAR(255),
     test_seq INT,
@@ -177,16 +179,15 @@ CREATE TABLE fact_edstays (
     subject_id INT REFERENCES dim_patients(subject_id),
     hadm_id INT,
     stay_id INT,
-    intdate INT REFERENCES dim_date(date_key),
-    inttime INT REFERENCES dim_time(time_key),
-    outdate INT REFERENCES dim_date(date_key),
-    outtime INT REFERENCES dim_time(time_key),
+    intime_date INT REFERENCES dim_date(date_key),
+    intime_time INT REFERENCES dim_time(time_key),
+    outtime_date INT REFERENCES dim_date(date_key),
+    outtime_time INT REFERENCES dim_time(time_key),
     gender VARCHAR(10),
     race VARCHAR(100),
     arrival_transport VARCHAR(50),
     disposition VARCHAR(50),
-    triage INT REFERENCES dim_triage(stay_id),
-    stay_duration INT
+    triage INT REFERENCES dim_triage(stay_id)
 );
 
 
@@ -198,21 +199,21 @@ CREATE TABLE fact_edstays (
 -- Indexes on fact table foreign keys
 CREATE INDEX idx_fact_chartevents_subject ON fact_chartevents(subject_id);
 CREATE INDEX idx_fact_chartevents_item ON fact_chartevents(itemid);
-CREATE INDEX idx_fact_chartevents_chartdate ON fact_chartevents(chartdate);
-CREATE INDEX idx_fact_chartevents_charttime ON fact_chartevents(charttime);
+CREATE INDEX idx_fact_chartevents_chartdate ON fact_chartevents(charttime_date);
+CREATE INDEX idx_fact_chartevents_charttime ON fact_chartevents(charttime_time);
 CREATE INDEX idx_fact_chartevents_stay ON fact_chartevents(stay_id);
 CREATE INDEX idx_fact_icustays_subject ON fact_icustays(subject_id);
 CREATE INDEX idx_fact_icustays_dates ON fact_icustays(intime_date, outtime_date);
 
 CREATE INDEX idx_fact_micro_subject ON fact_microbiologyevents(subject_id);
-CREATE INDEX idx_fact_micro_chartdate ON fact_microbiologyevents(chartdate);
+CREATE INDEX idx_fact_micro_chartdate ON fact_microbiologyevents(charttime_date);
 
 CREATE INDEX idx_fact_edstays_subject ON fact_edstays(subject_id);
-CREATE INDEX idx_fact_edstays_dates ON fact_edstays(intdate, outdate);
+CREATE INDEX idx_fact_edstays_dates ON fact_edstays(intime_date, outtime_date);
 
 -- Composite index for common queries (patient + time + item)
 CREATE INDEX idx_fact_chartevents_composite 
-    ON fact_chartevents(subject_id, chartdate, itemid);
+    ON fact_chartevents(subject_id, charttime_date, itemid);
 
 -- Index on valuenum for analytical queries
 CREATE INDEX idx_fact_chartevents_valuenum ON fact_chartevents(valuenum) 

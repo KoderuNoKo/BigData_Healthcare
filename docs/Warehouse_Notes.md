@@ -101,9 +101,17 @@ ORDER BY
 - Table 4: `ed/edstays` + `triage` with `stay_duration`
 
 ```postgresql
-SELECT *
-FROM fact_edstays fes
-LEFT JOIN dim_triage USING(stay_id) 
+SELECT
+    stay_id,
+    EXTRACT(
+        EPOCH FROM
+        (
+            (to_date(outdate::text, 'YYYYMMDD') + outtime * INTERVAL '1 second')
+          - (to_date(intdate::text, 'YYYYMMDD') + inttime * INTERVAL '1 second')
+        )
+    ) AS stay_duration_seconds
+FROM fact_edstays;
+
 ```
 
 

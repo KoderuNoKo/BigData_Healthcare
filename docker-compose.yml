@@ -83,7 +83,7 @@ services:
     container_name: spark
     volumes:
       - ./spark:/app  # mount to spark's sub-directory
-      - ./data/application_default_credentials.json:/secrets/application_default_credentials.json # replace with actual key json
+      - ./data/application_default_credentials.json:/secrets/application_default_credentials.json
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/secrets/application_default_credentials.json
     depends_on:
