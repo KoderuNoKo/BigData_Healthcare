@@ -33,7 +33,7 @@ for topic, cfg in FACT_TABLES.items():
             .option("path", cfg['silver_path'])
             .option("checkpointLocation", cfg['checkpoint_silver'])
             .outputMode("append")
-            .trigger(processingTime="1 minutes")  # Process every minute
+            .trigger(processingTime="1 minutes")  # process every minute
             .start()
     )
     

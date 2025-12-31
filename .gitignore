@@ -1,5 +1,6 @@
 data
 .venv
+.vscode
 *.tgz
 *.pdf
 lab

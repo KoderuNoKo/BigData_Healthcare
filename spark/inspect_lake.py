@@ -2,7 +2,7 @@ from pyspark.sql import functions as F
 from modules.topics_schema import *
 from modules.common import build_spark
 
-spark = build_spark("ReadBronze")
+spark = build_spark("test_debug")
 
 bronze_df = spark.read.parquet("s3a://mimic-bronze/chartevents/")
 

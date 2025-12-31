@@ -7,20 +7,9 @@ This job loads: dim_d_items, dim_patients
 
 # from pyspark.sql import functions as F
 
-from modules.common import build_spark, POSTGRES_CONFIG
+from modules.common import build_spark, POSTGRES_CONFIG, SCD_TABLES
 from modules.readers import read_local, read_bigquery
 from modules.writers import write_to_postgres
-from modules.topics_schema import (
-    admissions_schema,
-    edstays_schema,
-    diagnoses_icd_schema,
-    d_icd_diagnoses_schema,
-    d_items_schema,
-    icustays_schema,
-    patient_schema,
-    edstays_schema,
-    triage_schema
-)
 
 from pyspark.sql import functions as F
 from pyspark.sql.types import IntegerType
@@ -66,167 +55,13 @@ print("\n" + "="*60)
 print("JOB 3: Batch Load Dimension Tables")
 print("="*60)
 
-# Define tables to load
-TABLES = [
-
-    # =========================
-    # DIMENSIONS
-    # =========================
-    {
-        'name': 'dim_d_items',
-        'local_path': '/app/data/d_items.csv',
-        'columns': [
-            'itemid', 'label', 'abbreviation', 'category',
-            'unitname', 'param_type',
-            'lownormalvalue', 'highnormalvalue'
-        ],
-        'primary_key': ['itemid'],
-        'schema': d_items_schema
-    },
-    {
-        'name': 'dim_patients',
-        'local_path': '/app/data/patients.csv',
-        'columns': [
-            'subject_id', 'gender', 'anchor_age',
-            'anchor_year', 'anchor_year_group', 'dod'
-        ],
-        'primary_key': ['subject_id'],
-        'schema': patient_schema
-    },
-    {
-        'name': 'dim_diagnoses_icd',
-        'local_path': '/app/data/diagnoses_icd.csv',
-        'local_path_d': '/app/data/d_icd_diagnoses.csv',
-        'columns': [
-            'seq_num',
-            'icd_code',
-            'icd_version',
-            'long_title'
-        ],
-        'primary_key': ['icd_code', 'icd_version'],
-        'schema': diagnoses_icd_schema,
-        'schema_d': d_icd_diagnoses_schema
-    },
-    {
-        'name': 'dim_triage',
-        'local_path': '/app/data/triage.csv',
-        'columns': [
-            'stay_id', 'subject_id', 'temperature',
-            'heartrate', 'resprate', 'o2sat',
-            'sbp', 'dbp', 'pain', 'acuity',
-            'chiefcomplaint'
-        ],
-        'primary_key': ['stay_id'],
-        'schema': triage_schema
-    },
-    {
-        'name': 'dim_admission',
-        'local_path': '/app/data/admissions.csv',
-        'columns': [
-            'hadm_id', 'subject_id',
-            'admittime_time', 'admittime_date',
-            'dischtime_time', 'dischtime_date',
-            'deathtime_time', 'deathtime_date',
-            'admission_type', 'admit_provider_id',
-            'admission_location', 'discharge_location',
-            'insurance', 'language', 'marital_status',
-            'race',
-            'edregtime_time', 'edregtime_date',
-            'edouttime_time', 'edouttime_date',
-            'hospital_expire_flag'
-        ],
-        'primary_key': ['hadm_id'],
-        'schema': admissions_schema,
-        'timestamp_mappings': [
-            {
-                'source': 'admittime',
-                'date_col': 'admittime_date',
-                'time_col': 'admittime_time'
-            },
-            {
-                'source': 'dischtime',
-                'date_col': 'dischtime_date',
-                'time_col': 'dischtime_time'
-            },
-            {
-                'source': 'deathtime',
-                'date_col': 'deathtime_date',
-                'time_col': 'deathtime_time',
-            },            {
-                'source': 'edregtime',
-                'date_col': 'edregtime_date',
-                'time_col': 'edregtime_time',
-            },
-            {
-                'source': 'edouttime',
-                'date_col': 'edouttime_date',
-                'time_col': 'edouttime_time',
-            },
-        ],
-    },
-
-    # =========================
-    # FACT-LESS FACTS
-    # =========================
-    {
-        'name': 'fact_icustays',
-        'local_path': '/app/data/icustays.csv',
-        'columns': [
-            'stay_id', 'subject_id', 'hadm_id',
-            'first_careunit', 'last_careunit',
-            'intime_time', 'intime_date',
-            'outtime_time', 'outtime_date',
-            'los',
-        ],
-        'primary_key': ['stay_id'],
-        'schema': icustays_schema,
-        'timestamp_mappings': [
-            {
-                'source': 'intime',
-                'date_col': 'intime_date',
-                'time_col': 'intime_time'
-            },
-            {
-                'source': 'outtime',
-                'date_col': 'outtime_date',
-                'time_col': 'outtime_time'
-            }
-        ],
-    },
-    {
-        'name': 'fact_edstays',
-        'local_path': '/app/data/edstays.csv',
-        'columns': [
-            'subject_id', 'hadm_id', 'stay_id',
-            'intime_date', 'intime_time',
-            'outtime_date', 'outtime_time',
-            'gender', 'race',
-            'arrival_transport', 'disposition',
-        ],
-        'primary_key': ['stay_id'],
-        'schema': edstays_schema,
-        'timestamp_mappings': [
-            {
-                'source': 'intime',
-                'date_col': 'intime_date',
-                'time_col': 'intime_time'
-            },
-            {
-                'source': 'outtime',
-                'date_col': 'outtime_date',
-                'time_col': 'outtime_time'
-            }
-        ],
-    }
-]
-
 # =============================================
 # MAIN PROCESSING LOOP
 # =============================================
 
 loaded_tables = {}
 
-for table in TABLES:
+for table in SCD_TABLES:
     # big query
     # columns_str = ', '.join(dim['columns'])
     # query = f"""

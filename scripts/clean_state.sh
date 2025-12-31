@@ -32,5 +32,5 @@ docker exec minio bash -c 'rm -rf /data/mimic-bronze/*'
 docker exec minio bash -c 'rm -rf /data/mimic-silver/*'
 
 # reset postgresql data warehouse
-docker exec -it postgres psql -U dev -d mimic_dw -c \
-  "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+# docker exec -it postgres psql -U dev -d mimic_dw -c \
+#   "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
