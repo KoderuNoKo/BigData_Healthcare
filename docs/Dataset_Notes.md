@@ -1,4 +1,4 @@
-# General Information
+	# General Information
 
 - Dataset: MIMIC-IV, v3.1
 - Modules used:
@@ -30,7 +30,7 @@
 ### Project Notes
 
 - Focus on timeseries data for streaming and simulating velocity of data.
-	
+
 ### Data Notes
 
 - Date shifting
@@ -92,15 +92,10 @@ All dates in the database have been shifted to protect patient confidentiality. 
 - **Tables:**
     
     - **edstays:** Metadata for each ED stay (arrival/departure, demographics, identifiers).
-        
     - **diagnosis:** ED-specific diagnoses assigned during visit.
-        
     - **triage:** Triage assessment (acuity level, chief complaint).
-        
     - **vitalsign:** Vital sign measurements (heart rate, BP, resp, temp, etc.).
-        
     - **medrecon:** Medication reconciliation records.
-        
     - **pyxis:** Records of medication dispensing from automated cabinets.
-        
+    
 - **Uses:** Supports studies on ED workflow, patient acuity, early warning, triage performance, admission/discharge prediction, and medication safety.

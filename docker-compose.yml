@@ -8,3 +8,95 @@ services:
       - .:/home/dev/app   # Mount project folder inside container
     tty: true             # Keep container running
     stdin_open: true      # Allow interactive shell
+    ports:
+      - "8501:8501"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: "cp-zookeeper"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    depends_on: ["zookeeper"]
+    container_name: "cp-kafka"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'cp-zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://cp-kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # Web Console
+    volumes:
+      - minio_data:/data
+    networks:
+      - default
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: mimic_dw
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - default
+
+  # browser ui for postgresql
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kien@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    networks:
+      - default
+
+  spark:
+    build:
+      context: ./docker/spark
+      dockerfile: Dockerfile
+    container_name: spark
+    volumes:
+      - ./spark:/app  # mount to spark's sub-directory
+      - ./data/application_default_credentials.json:/secrets/application_default_credentials.json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/application_default_credentials.json
+    depends_on:
+      - kafka
+      - minio
+      - postgres
+    ports:
+      - "4040:4040"   # spark ui
+    networks:
+      - default
+
+
+volumes:
+  minio_data:
+  postgres_data:
+  
