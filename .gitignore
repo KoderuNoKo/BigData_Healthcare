@@ -2,7 +2,6 @@ data
 .venv
 .vscode
 *.tgz
-*.pdf
 lab
 *.tgz
 **/__pycache__/

@@ -1,4 +1,4 @@
-	# General Information
+# General Information
 
 - Dataset: MIMIC-IV, v3.1
 - Modules used:
@@ -6,7 +6,7 @@
 	- ICU: Highly granular information collected from the clinical information system used within the ICU.
 	- ED: Data for emergency department patients.
 - Source: Data obtained from [PhysioNet](https://physionet.org/content/mimiciv/3.1/)
-- Dataset Documentations: Available at https://mimic.mit.edu/
+- Dataset Documentations: Available at [mimic.mit.edu](https://mimic.mit.edu/)
 
 # Important Terms
 
@@ -33,11 +33,7 @@
 
 ### Data Notes
 
-- Date shifting
-All dates in the database have been shifted to protect patient confidentiality. Dates will be internally consistent for the same patient, but randomly distributed in the future. Dates of birth which occur in the present time are not true dates of birth. Furthermore, dates of birth which occur before the year 1900 occur if the patient is older than 89. In these cases, the patient’s age at their first admission has been fixed to 300. => *Birthdate is as good as worthless*
-
-
-
+- Date shifting: All dates in the database have been shifted to protect patient confidentiality. Dates will be internally consistent for the same patient, but randomly distributed in the future. Dates of birth which occur in the present time are not true dates of birth. Furthermore, dates of birth which occur before the year 1900 occur if the patient is older than 89. In these cases, the patient’s age at their first admission has been fixed to 300. => *Birthdate is as good as worthless*
 
 # Modules
 
